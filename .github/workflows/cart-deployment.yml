@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'retail-store-sample-app/src/cart/**'
+      - 'src/cart/**'
 
 permissions:
   id-token: write
@@ -21,7 +21,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::123456789012:role/github-actions-ecs-role
+          role-to-assume: arn:aws:iam::387994677123:role/github-actions-ecs-role
           aws-region: us-east-1
 
       - name: Login to Amazon ECR
