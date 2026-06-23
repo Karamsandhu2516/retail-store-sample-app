@@ -26,9 +26,6 @@ jobs:
           role-to-assume: arn:aws:iam::387994677123:role/github-actions-ecs-role
           aws-region: us-east-1
 
-      - name: Download active task definition
-        run: |
-          aws ecs describe-task-definition --task-definition order-service --query taskDefinition > task-definition.json
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -48,7 +45,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition.json 
+          task-definition: task-definition-order.json 
           container-name: order-container      
           image: ${{ steps.login-ecr.outputs.registry }}/order-service:${{ github.sha }}
 

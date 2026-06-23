@@ -1,0 +1,24 @@
+{
+  "family": "order-service",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "order-container",
+      "image": "387994677123.dkr.ecr.us-east-1.amazonaws.com/order-service:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::387994677123:role/ecsTaskExecutionRole"
+}
