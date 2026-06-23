@@ -31,24 +31,25 @@ jobs:
       - name: Build, Tag, and Push Image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: catalog-service
+          ECR_REPOSITORY: cart-service
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          cd src/catalog
+          cd src/cart
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json 
-          container-name: catalog-container      
-          image: ${{ steps.login-ecr.outputs.registry }}/catalog-service:${{ github.sha }}
+          container-name: cart-container      
+          image: ${{ steps.login-ecr.outputs.registry }}/cart-service:${{ github.sha }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: catalog-service               
+          service: cart-service               
           cluster: retail-store-cluster         
-          wait-for-service-stability: true   
+          wait-for-service-stability: true
