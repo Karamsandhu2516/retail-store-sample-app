@@ -114,6 +114,11 @@ permissions:
   id-token: write
   contents: read
 
+echo "# trigger build" >> src/cart/README.md
+echo "# trigger build" >> src/orders/README.md
+echo "# trigger build" >> src/catalog/README.md
+echo "# trigger build" >> src/checkout/README.md 
+
 ## Quick Start
 
 **Want to deploy immediately?** Follow these steps for a basic deployment:
