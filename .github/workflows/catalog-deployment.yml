@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'src/catalog/**'
+      - '.github/workflows/catalog-deployment.yml'
+  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -23,6 +25,10 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::387994677123:role/github-actions-ecs-role
           aws-region: us-east-1
+
+      - name: Download active task definition
+        run: |
+          aws ecs describe-task-definition --task-definition catalog-service --query taskDefinition > task-definition.json
 
       - name: Login to Amazon ECR
         id: login-ecr
