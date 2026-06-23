@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -26,11 +26,9 @@ jobs:
           role-to-assume: arn:aws:iam::387994677123:role/github-actions-ecs-role
           aws-region: us-east-1
 
-
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-
 
       - name: Build, Tag, and Push Image to Amazon ECR
         env:
@@ -41,19 +39,3 @@ jobs:
           cd src/orders
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition-order.json 
-          container-name: order-container      
-          image: ${{ steps.login-ecr.outputs.registry }}/order-service:${{ github.sha }}
-
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: order-service               
-          cluster: retail-store-cluster         
-          wait-for-service-stability: true
